@@ -26,7 +26,7 @@ function start(){
         tempo_segundos = 60;
     }
     if (nivel_jogo == 3){
-        tempo_segundos = 10;
+        tempo_segundos = 30;
     }
 
     //Inserindo segundos dentro do SPAN
@@ -35,7 +35,7 @@ function start(){
 
     //Criar balões
 
-    var qtd_baloes = 99
+    var qtd_baloes = 99;
 
     cria_baloes(qtd_baloes);
 
@@ -54,11 +54,24 @@ function cria_baloes(qtd_baloes){
         var balao = document.createElement("img");
         balao.src = "imagens/balao_azul_pequeno.png";
         balao.style.margin = "12px";
+        balao.id = "bexiga: " + i;
+        balao.onclick = function(){estourar(this);} 
 
         /* Objeto document.getElementById pegará o cenário do html
         Enquanto o AppendChield (DOM) criará parentescos dentro do html */ 
         document.getElementById("cenario").appendChild(balao);    
     }
+}
+
+function estourar(balaoelemento){
+    
+    var id_balao = balaoelemento.id;
+
+    document.getElementById(id_balao).setAttribute("onclick", "");
+    document.getElementById(id_balao).src = "imagens/balao_azul_pequeno_estourado.png";
+
+    pontos(-1);
+
 }
 
 function contagem_regressiva(tempo){
@@ -78,7 +91,35 @@ function contagem_regressiva(tempo){
 
 }
 
-function game_over(){
-    alert("Fim de Jogo \nVocê não conseguiu estourar todos os balões a tempo")
+function pontos(acao){
+    var balao_cheio = document.getElementById("contagem1").innerHTML;
+    var balao_estourado = document.getElementById("contagem2").innerHTML;
 
+    balao_cheio = parseInt(balao_cheio);
+    balao_estourado = parseInt(balao_estourado);
+
+    balao_cheio = balao_cheio + acao;
+    balao_estourado = balao_estourado - acao;
+
+    document.getElementById("contagem1").innerHTML = balao_cheio;
+    document.getElementById("contagem2").innerHTML = balao_estourado;
+
+    situacao_jogo(balao_cheio);
+
+}
+
+function situacao_jogo(numbalcheio){
+    if (numbalcheio == 0){
+        alert("Parabéns! Você Conseguiu!");
+        pararjogo ();
+    }
+}
+
+function pararjogo(){
+    clearTimeout(TempoReset);
+}
+
+function game_over(){
+    alert("Fim de Jogo \nVocê não conseguiu estourar todos os balões a tempo \n Clique em Ok para voltar ao MENU");
+    location.href="index.html";
 }
