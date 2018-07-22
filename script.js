@@ -1,3 +1,4 @@
+var TempoReset = null //armazena a chamada da function TimeOut
 
 //Função serve para pegar o nível selecionado pelo usuário é atribuir a ele uma localização especifica na página. Vale ressaltar que seu uso com a (?) ex: "index.html?" é fundamental.
 
@@ -25,23 +26,25 @@ function start(){
         tempo_segundos = 60;
     }
     if (nivel_jogo == 3){
-        tempo_segundos = 60;
+        tempo_segundos = 10;
     }
 
-//Inserindo segundos dentro do SPAN
+    //Inserindo segundos dentro do SPAN
 
     document.getElementById("cronometro").innerHTML = tempo_segundos;
 
-//Criar balões
+    //Criar balões
 
     var qtd_baloes = 99
 
     cria_baloes(qtd_baloes);
 
-//Imprimir qtd de balões inteiros
+    //Imprimir qtd de balões inteiros
 
     document.getElementById("contagem1").innerHTML = qtd_baloes;
     document.getElementById("contagem2").innerHTML = 0;
+
+    contagem_regressiva(tempo_segundos + 1);
 
 }
 
@@ -54,10 +57,28 @@ function cria_baloes(qtd_baloes){
 
         /* Objeto document.getElementById pegará o cenário do html
         Enquanto o AppendChield (DOM) criará parentescos dentro do html */ 
-
-
-        document.getElementById("cenario").appendChild(balao);
-    
+        document.getElementById("cenario").appendChild(balao);    
     }
+}
+
+function contagem_regressiva(tempo){
+
+    tempo = tempo - 1
+
+    if(tempo == -1){
+        clearTimeout(TempoReset);
+        game_over();
+
+        return false;
+    }
+
+    document.getElementById("cronometro").innerHTML = tempo
+
+    TempoReset = setTimeout("contagem_regressiva("+tempo+")",1000);
+
+}
+
+function game_over(){
+    alert("Fim de Jogo \nVocê não conseguiu estourar todos os balões a tempo")
 
 }
